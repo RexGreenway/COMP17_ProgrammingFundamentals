@@ -1,4 +1,5 @@
 # COMP517 - Programming Fundamentals
+By Rex Greenway
 
 Some small basic projects completed in python for module COMP517 - Programming Fundamentals @ University of Liverpool.
 
