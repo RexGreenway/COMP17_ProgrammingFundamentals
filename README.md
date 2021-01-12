@@ -12,3 +12,4 @@ BankAccounts.py - Bank Account and Premium Account Classes with basic included m
 
 TradingCards.py - Basic python trading card and deck manager. Combination of all ptechniques used in previous projects. (Uses openpyxl library)
 
+https://github.com/RexGreenway/COMP17_ProgrammingFundamentals.git
