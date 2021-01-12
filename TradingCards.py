@@ -1,5 +1,3 @@
-# Thomas Rex Greenway, 201198319
-
 ## IMPORTS ##
 import openpyxl
 
