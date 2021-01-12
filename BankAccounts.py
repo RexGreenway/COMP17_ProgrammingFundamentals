@@ -1,5 +1,3 @@
-# Thomas Rex Greenway, 201198319
-
 # IMPORTS #
 import random as r
 from datetime import date
