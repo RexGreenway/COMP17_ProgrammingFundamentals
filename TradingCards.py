@@ -5,7 +5,7 @@ import openpyxl
 ### CARD CLASS ###
 class Card():
     """
-    Card is an individual trading card. Has Name, Type, HP, Moves (dict.), and Shiny (boolean). Also contains Card Average Damage as a data tracker.
+    Card is an individual trading card. Has Name, Type, HP, Moves (dict.), and Shiny (boolean). Also contains Card Average Damage as a private data tracker.
     """
     def __init__(self, theName, theType, theHP, theMoves, isShiny):
         self.theName = theName
@@ -14,11 +14,13 @@ class Card():
         self.isShiny = isShiny
         self.theMoves = theMoves
 
-        self.avgDamage = self.getAverageDamage()
+        # Private variable
+        self._avgDamage = self.getAverageDamage()
     
     def __str__(self):
         return "Card: {self.theName}\nType: {self.theType}\nHP: {self.theHP}\nMoves: {self.theMoves}\nShiny: {self.isShiny}".format(self=self)
     
+    # Card Average Damage Getter
     def getAverageDamage(self):
         """
         Returns average damage for card across all of its moves.
@@ -32,23 +34,27 @@ class Card():
         for move in self.theMoves:
             dmg = self.theMoves.get(move)
             totalDamage += dmg
+        
+        # Error handling for case where card has no moves. Cannot divide by zero.
         try:
-            self.avgDamage = totalDamage/len(self.theMoves)
+            self._avgDamage = totalDamage/len(self.theMoves)
         except ZeroDivisionError:
-            self.avgDamage = 0
-        return self.avgDamage
+            self._avgDamage = 0
+        return self._avgDamage
         
 
 ### DECK CLASS ###
 class Deck():
     """
-    Deck is a collection of trading cards. Has Deck, a list to be populated with card instances, and 3 data trackers, Deck Average Damage, Total Cards, Total Shiny Cards.
+    Deck is a collection of trading cards. Has Deck, a list to be populated with card instances, and 3 private data trackers, Deck Average Damage, Total Cards, Total Shiny Cards.
     """
     def __init__(self):
         self.deck = []
-        self.avgDamage = 0
-        self.totalCardNum = 0
-        self.totalShinyNum = 0
+
+        # Private Variables
+        self._avgDamage = 0
+        self._totalCardNum = 0
+        self._totalShinyNum = 0
 
 
     def inputFromFile(self, fileName):
@@ -87,7 +93,7 @@ class Deck():
 
 
     def __str__(self):
-        return "DECK:\n\tTotal Card Number: {self.totalCardNum}\n\tTotal Shiny Number: {self.totalShinyNum}\n\tAverage Damage Value: {self.avgDamage}".format(self=self)
+        return "DECK:\n\tTotal Card Number: {self._totalCardNum}\n\tTotal Shiny Number: {self._totalShinyNum}\n\tAverage Damage Value: {self._avgDamage}".format(self=self)
     
 
     def addCard(self, theCard):
@@ -95,16 +101,17 @@ class Deck():
         Adds a card instance to the deck list. Also updates relative data tracking variables; total card number, total shiny number, and average damage.
 
         Parameters:
-            theCard: string - the variable name of the card instance.
+            theCard: variable name of the desired card instance.
         Returns:
             Nothing
         """
+        # Ensuring correct argument type.
         if isinstance(theCard, Card):
             self.deck.append(theCard)
-            self.totalCardNum += 1
+            self._totalCardNum += 1
             if (theCard.isShiny == True):
-                self.totalShinyNum += 1
-            self.avgDamage = self.getAverageDamage()
+                self._totalShinyNum += 1
+            self._avgDamage = self.getAverageDamage()
         else:
             print("PLEASE INPUT A CARD")
 
@@ -114,16 +121,17 @@ class Deck():
         Removes a card instance to the deck list. Also updates relative data tracking variables; total card num,ber, total shiny number, and avergae damage.
 
         Parameters:
-            theCard: string - the variable name of the card instance.
+            theCard: variable name of the desired card instance.
         Returns:
             Nothing
         """
+        # Ensuring correct argument type.
         if isinstance(theCard, Card):
             self.deck.remove(theCard)
-            self.totalCardNum -= 1
+            self._totalCardNum -= 1
             if (theCard.isShiny == True):
-                self.totalShinyNum -= 1
-            self.avgDamage = self.getAverageDamage()
+                self._totalShinyNum -= 1
+            self._avgDamage = self.getAverageDamage()
         else:
             print("PLEASE INPUT A CARD")
 
@@ -145,6 +153,7 @@ class Deck():
         return mostPowerful
 
 
+    # Deck Average Damage Getter
     def getAverageDamage(self):
         """
         Returns the average damage of all cards in the deck list.
@@ -159,12 +168,12 @@ class Deck():
             dmg = card.getAverageDamage()
             totalDamage += dmg
 
-        # Error exception for when the deck is empty. Cannot divide by zero.
+        # Error handling for when the deck is empty. Cannot divide by zero.
         try:
-            self.avgDamage = totalDamage/len(self.deck)
+            self._avgDamage = totalDamage/len(self.deck)
         except ZeroDivisionError:
-            self.avgDamage = 0
-        return round(self.avgDamage, 1) 
+            self._avgDamage = 0
+        return round(self._avgDamage, 1) 
 
 
     def viewAllCards(self):
@@ -176,8 +185,8 @@ class Deck():
         Returns:
             string - card information from the deck list.
         """
-        if (self.totalCardNum > 0):    
-            print("THIS DECK CONTAINS " + str(self.totalCardNum) + " CARDS.")
+        if (self._totalCardNum > 0):    
+            print("THIS DECK CONTAINS " + str(self._totalCardNum) + " CARDS.")
             for card in self.deck:
                 print("\n", str(card))
         else:
@@ -193,8 +202,8 @@ class Deck():
         Returns:
             string - card information from the deck list.
         """
-        if (self.totalShinyNum > 0):
-            print("THIS DECK CONTAINS " + str(self.totalShinyNum) + " SHINY CARDS:")
+        if (self._totalShinyNum > 0):
+            print("THIS DECK CONTAINS " + str(self._totalShinyNum) + " SHINY CARDS:")
             for card in self.deck:
                 if (card.isShiny == True):
                     print ("\n", str(card))
@@ -276,3 +285,17 @@ class Deck():
         
         #Save workbook.
         book.save(fileName + ".xlsx")
+
+
+    # PROPERTIES
+    @property
+    def totalCardNum(self):
+        return self._totalCardNum
+
+    @property
+    def totalShinyNum(self):
+        return self._totalShinyNum
+
+    @property
+    def avgDamage(self):
+        return self._avgDamage
